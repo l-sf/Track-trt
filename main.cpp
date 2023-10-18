@@ -75,9 +75,12 @@ void LaunchTrack(shared_ptr<T> tracker, int Mode, const string& path){
         cv::Mat img;
         for (int i = 1; i < 597; ++i) {
             img = cv::imread((fmt % i).str(),1);
-
+            auto start = std::chrono::steady_clock::now();
             bbox = tracker->track(img);
-
+            auto end = std::chrono::steady_clock::now();
+            std::chrono::duration<double> elapsed = end - start;
+            double time = 1000 * elapsed.count();
+            printf("all infer time: %f ms\n", time);
             cv::rectangle(img, bbox, cv::Scalar(0,255,0), 2);
             cv::imshow(display_name, img);
             cv::waitKey(1);
