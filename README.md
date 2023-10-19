@@ -4,11 +4,17 @@
 
 ![Language](https://img.shields.io/badge/language-c++-brightgreen) ![Language](https://img.shields.io/badge/CUDA-12.1-brightgreen) ![Language](https://img.shields.io/badge/TensorRT-8.6.1.6-brightgreen) ![Language](https://img.shields.io/badge/OpenCV-4.5.5-brightgreen) ![Language](https://img.shields.io/badge/ubuntu-20.04-brightorigin)
 
+
+
 ## Introduction
 
-基于 TensorRT 的 C++ 高性能 单目标跟踪 推理。
+基于 TensorRT 的 C++ 高性能 单目标跟踪 推理，支持单目标跟踪算法 OSTrack、LightTrack。
 
-支持单目标跟踪算法 OSTrack、LightTrack，分别适用于服务端和边缘端的计算设备，请按需使用。
+其中 OSTrack 为ViT模型，适用于服务端计算设备，LightTrack 为 NAS 搜索出来的轻量CNN架构，适用于边缘端计算设备。
+
+请按需使用。
+
+更多 TensorRT 部署模型，请移步仓库 [github](https://github.com/l-sf/Linfer) 
 
 
 
@@ -24,25 +30,41 @@
 
    2. ```bash
       cd Linfer/workspace
-      # 修改其中的onnx路径
       bash compile_engine.sh
       ```
 
 3. build 
 
    ```bash
-   # 修改CMakeLists.txt中cuda/tensorrt/opencv为自己的路径
-   cd Linfer
+   # 修改CMakeLists.txt中 cuda/tensorrt/opencv 为自己的路径
+   cd Track-trt
    mkdir build && cd build
    cmake .. && make -j4
    ```
 
 4. run
 
+   视频文件输入：
+
    ```bash
-   cd Linfer/workspace
-   ./pro
+   cd Track-trt/workspace
+   ./pro 0 "bag.avi"
    ```
+
+   摄像头输入：
+
+   ```bash
+   cd Track-trt/workspace
+   ./pro 1 0
+   ```
+
+   图片序列输入：
+
+   ```bash
+   cd Track-trt/workspace
+   ./pro 2 "Woman/img/%04d.jpg"
+   ```
+
 
 
 
@@ -50,21 +72,15 @@
 
 在 Jetson Orin Nano 8G 上进行测试，测试包括整个流程（即预处理+推理+后处理）
 
-|   Model    | Precision | Resolution | FPS(bs=1) | FPS(bs=4) |
-| :--------: | :-------: | :--------: | :-------: | :-------: |
-|  yolov5_s  |   fp16    |  640x640   |   96.06   |   100.9   |
-|  yolox_s   |   fp16    |  640x640   |   79.64   |   85.00   |
-|   yolov7   |   int8    |  640x640   |   49.55   |   50.42   |
-|  yolov8_n  |   fp16    |  640x640   |  121.94   |  130.16   |
-|  yolov8_s  |   fp16    |  640x640   |   81.40   |   84.74   |
-|  yolov8_l  |   fp16    |  640x640   |    13     |    tbd    |
-| rtdetr_r50 |   fp16    |  640x640   |    12     |    tbd    |
+|   Method   | Precision | Resolution | FPS(bs=1) |
+| :--------: | :-------: | :--------: | :-------: |
+| LightTrack |   fp16    |  256x256   |           |
+|  OSTrack   |   fp16    |  256x256   |           |
+| OSTrack-ce |   fp16    |  284x384   |           |
 
 
 
 ## Reference
 
-- [tensorRT_Pro](https://github.com/shouxieai/tensorRT_Pro.git) 
-- [infer](https://github.com/shouxieai/infer.git) 
-- [Video：详解TensorRT的C++/Python高性能部署，实战应用到项目](https://www.bilibili.com/video/BV1Xw411f7FW/?share_source=copy_web&vd_source=4bb05d1ac6ff39b7680900de14419dca) 
+[tensorRT_Pro](https://github.com/shouxieai/tensorRT_Pro.git) 
 

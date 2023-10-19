@@ -1,3 +1,7 @@
+//
+// Created by lsf on 23-10-19.
+//
+
 #ifndef LIGHTTRACK_HPP
 #define LIGHTTRACK_HPP
 
@@ -6,8 +10,7 @@
 #include <memory>
 #include <opencv2/opencv.hpp>
 
-
-namespace LightTrack{
+namespace LightTrack {
 
     using namespace std;
 
@@ -17,11 +20,8 @@ namespace LightTrack{
         virtual cv::Rect track(cv::Mat& x_img) = 0;
     };
 
-    shared_ptr<Tracker> create_tracker(
-            const std::string &z_path, const std::string &x_path, const std::string &head_path,
-            int gpuid = 0, bool use_multi_preprocess_stream = false
-            );
+    shared_ptr<Tracker> create_tracker(const std::string &z_path, const std::string &x_path, int gpuid = 0);
+};
 
-}
 
 #endif //LIGHTTRACK_HPP

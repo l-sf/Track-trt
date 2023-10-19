@@ -18,7 +18,7 @@ file(GLOB_RECURSE CPPS
         ${PROJECT_SOURCE_DIR}/trt_common/*.cu
 )
 
-# set(OpenCV_DIR   "/home/lsf/Third_party/OPENCV_3_4_8/opencv/build")
+# set(OpenCV_DIR   "/home/lsf/Third_party/OPENCV_4_5_5/opencv/build")
 set(CUDA_DIR      "/usr/local/cuda")
 set(TENSORRT_DIR  "/home/lsf/Third_party/TensorRT-8.6.1.6")
 find_package(OpenCV REQUIRED)

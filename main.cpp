@@ -1,4 +1,5 @@
 
+#include <iostream>
 #include <fstream>
 #include <boost/format.hpp>
 #include "lighttrack/LightTrack.hpp"
@@ -55,9 +56,12 @@ void LaunchTrack(shared_ptr<T> tracker, int Mode, const string& path){
                 cout << "----------Read failed!!!----------" << endl;
                 return;
             }
-
+            auto start = std::chrono::steady_clock::now();
             bbox = tracker->track(img);
-
+            auto end = std::chrono::steady_clock::now();
+            std::chrono::duration<double> elapsed = end - start;
+            double time = 1000 * elapsed.count();
+            printf("all infer time: %f ms\n", time);
             cv::rectangle(img, bbox, cv::Scalar(0,255,0), 2);
             cv::imshow(display_name, img);
             cv::waitKey(1);
@@ -88,7 +92,7 @@ void LaunchTrack(shared_ptr<T> tracker, int Mode, const string& path){
         return;
     }
     else {
-        printf("MODE错误，0：视频文件；1：摄像头；2：数据集");
+        printf("Mode错误，0：视频文件；1：摄像头；2：数据集");
         return;
     }
 }
@@ -104,14 +108,19 @@ int main(int argc, char* argv[]){
     string path = argv[2];
 
     string z_path = "lighttrack-z.trt";
-    string x_path = "lighttrack-x.trt";
-    string head_path = "lighttrack-head.trt";
+    string x_path = "lighttrack-x-head.trt";
     string engine_path = "ostrack-256.trt";
-//    string engine_path = "ostrack-384-ce.trt";
-    auto tracker1 = LightTrack::create_tracker(z_path, x_path, head_path);
-    auto tracker2 = OSTrack::create_tracker(engine_path);
 
-    LaunchTrack(tracker2, Mode, path);
+    auto tracker = LightTrack::create_tracker(z_path, x_path);
+//    auto tracker = OSTrack::create_tracker(engine_path);
+    if(tracker == nullptr){
+        printf("tracker is nullptr.\n");
+        return -1;
+    }
+
+    LaunchTrack(tracker, Mode, path);
+
+
 
     return 0;
 }

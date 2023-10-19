@@ -255,7 +255,6 @@ namespace TRT{
 			int gpu_device_id = device();
 			if(current_device_id != gpu_device_id){
 				checkCudaRuntime(cudaMemcpyPeerAsync(gpu<unsigned char>() + offset_location, gpu_device_id, src, current_device_id, copied_bytes, stream_));
-				//checkCudaRuntime(cudaMemcpyAsync(gpu<unsigned char>() + offset_location, src, copied_bytes, cudaMemcpyDeviceToDevice, stream_));
 			}
 			else{
 				checkCudaRuntime(cudaMemcpyAsync(gpu<unsigned char>() + offset_location, src, copied_bytes, cudaMemcpyDeviceToDevice, stream_));
@@ -534,6 +533,16 @@ namespace TRT{
 		Assert((void*)ms[0].data == (void*)cpu<float>(n));
 		return *this;
 	}
+
+    Tensor& Tensor::set_mat_c1(int n, const cv::Mat& _image) {
+        cv::Mat image = _image;
+        Assert(!image.empty());
+        to_cpu(false);
+        int width  = image.cols;
+        int height = image.rows;
+        memcpy(cpu<uchar>(n), image.data, width * height);
+        return *this;
+    }
     
 
 }; // TRTTensor

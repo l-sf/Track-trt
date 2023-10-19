@@ -152,7 +152,8 @@ namespace TRT {
         CUStream get_stream() const{return stream_;}
         Tensor& set_stream(CUStream stream, bool owner=false){stream_ = stream; stream_owner_ = owner; return *this;}
 
-        Tensor& set_mat     (int n, const cv::Mat& image);
+        Tensor& set_mat   (int n, const cv::Mat& image);
+        Tensor& set_mat_c1(int n, const cv::Mat& image);
         Tensor& set_norm_mat_invert(int n, const cv::Mat& image, float mean[3], float std[3]);
         Tensor& set_norm_mat(int n, const cv::Mat& image, float mean[3], float std[3]);
         cv::Mat at_mat(int n = 0, int c = 0) { return {height(), width(), CV_32F, cpu<float>(n, c)}; }

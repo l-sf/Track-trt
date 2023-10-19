@@ -81,7 +81,7 @@ namespace OSTrack {
             offset_map_ = infer_model_->output(0);
 
             // 推理
-            infer_model_->forward(true);
+            infer_model_->forward();
 
             // 后处理，计算bbox
             auto* score_ptr = score_map_->cpu<float>();
@@ -98,7 +98,6 @@ namespace OSTrack {
                     max_value = tmp_score;
                 }
             }
-            max_score_ = max_value;
             int max_idx_y = max_idx / score_map_->shape(2);
             int max_idx_x = max_idx % score_map_->shape(2);
 
@@ -139,16 +138,19 @@ namespace OSTrack {
             float cx = target_bbox_.x + 0.5f * target_bbox_.width;
             float cy = target_bbox_.y + 0.5f * target_bbox_.height;
             int crop_sz = std::ceil(std::sqrt(target_bbox_.width * target_bbox_.height) * area_factor);
+
             // 计算出剪裁边框的左上角和右下角
             int crop_x1 = std::round(cx - crop_sz * 0.5f);
             int crop_y1= std::round(cy - crop_sz * 0.5f);
             int crop_x2 = crop_x1 + crop_sz;
             int crop_y2 = crop_y1 + crop_sz;
+
             // 边界部分要填充的像素
             int left_pad = std::max(0, -crop_x1);
             int top_pad = std::max(0, -crop_y1);
             int right_pad = std::max(0, crop_x2 - img.cols + 1);
             int bottom_pad = std::max(0, crop_y2 - img.rows + 1);
+
             // 填充之后的坐标(即要裁切的ROI)
             cv::Rect crop_roi(crop_x1 + left_pad, crop_y1 + top_pad, crop_x2 - crop_x1, crop_y2 - crop_y1);
             if (left_pad > 0 || top_pad > 0 || right_pad > 0 || bottom_pad > 0) {
@@ -162,6 +164,7 @@ namespace OSTrack {
             else{
                 img_patch_roi = img(crop_roi);
             }
+
             // 缩放
             cv::resize(img_patch_roi, dst, cv::Size(model_sz, model_sz));
 
@@ -172,10 +175,8 @@ namespace OSTrack {
         float search_factor_ = 4.0f; // 5.0f
         int template_size_ = 128; //192
         int search_size_ = 256; // 384
-        int total_stride_ = 16;
         int feat_sz_ = 16; // 24
         vector<float> han_window_;
-        float max_score_ = 0.f;  // 最大响应值
         cv::Rect target_bbox_; // 目标框
 
         shared_ptr<TRT::Infer> infer_model_;
