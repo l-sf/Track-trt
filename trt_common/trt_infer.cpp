@@ -195,7 +195,6 @@ namespace TRT {
     }
 
     void InferImpl::build_engine_input_and_output_mapper() {
-//        auto* context = (EngineContext*)this->context_.get();
         int nbBindings = context_->engine_->getNbBindings();
 
         inputs_.clear();

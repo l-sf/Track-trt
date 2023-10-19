@@ -100,7 +100,7 @@ void LaunchTrack(shared_ptr<T> tracker, int Mode, const string& path){
 
 int main(int argc, char* argv[]){
     if (argc != 3){
-        fprintf(stderr, "usage: %s [mode] [path]. \n For video, mode=0, path=/xxx/xxx/*.mp4; \n For webcam mode=1, path is cam id; \n For image dataset, mode=2, path=xxx/xxx/%04d.jpg; \n", argv[0]);
+        fprintf(stderr, "usage: %s [mode] [path]. \n For video, mode=0, path=/xxx/xxx/*.mp4; \n For webcam mode=1, path is cam id; \n For image dataset, mode=2, path=Woman/img/%04d.jpg; \n", argv[0]);
         return -1;
     }
     // Mode=0: 视频文件   Mode=1: 摄像头   Mode=2: 数据集

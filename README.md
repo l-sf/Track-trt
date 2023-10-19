@@ -10,9 +10,7 @@
 
 基于 TensorRT 的 C++ 高性能 单目标跟踪 推理，支持单目标跟踪算法 OSTrack、LightTrack。
 
-其中 OSTrack 为ViT模型，适用于服务端计算设备，LightTrack 为 NAS 搜索出来的轻量CNN架构，适用于边缘端计算设备。
-
-请按需使用。
+其中 OSTrack 为ViT模型，适用于服务端计算设备，LightTrack 为NAS搜索出来的轻量CNN架构，适用于边缘端计算设备。请按需使用。
 
 更多 TensorRT 部署模型，请移步仓库 [github](https://github.com/l-sf/Linfer) 
 
@@ -70,13 +68,12 @@
 
 ## Speed Test
 
-在 Jetson Orin Nano 8G 上进行测试，测试包括整个流程（即预处理+推理+后处理）
+在 Jetson Orin Nano 8G 上进行测试，包括整个流程（即预处理+推理+后处理）
 
-|   Method   | Precision | Resolution | FPS(bs=1) |
-| :--------: | :-------: | :--------: | :-------: |
-| LightTrack |   fp16    |  256x256   |           |
-|  OSTrack   |   fp16    |  256x256   |           |
-| OSTrack-ce |   fp16    |  284x384   |           |
+|   Method   | Precision | Resolution | Average Latency |
+| :--------: | :-------: | :--------: | :-------------: |
+| LightTrack |   fp16    |  256x256   |      10ms       |
+|  OSTrack   |   fp16    |  256x256   |      30ms       |
 
 
 
