@@ -24,10 +24,10 @@
 
 2. compile engine
 
-   1. 下载onnx模型 [google driver](https://drive.google.com/drive/folders/16ZqDaxlWm1aDXQsjsxLS7yFL0YqzHbxT?usp=sharing) 
+   1. 下载onnx模型 [google driver](https://drive.google.com/drive/folders/16ZqDaxlWm1aDXQsjsxLS7yFL0YqzHbxT?usp=sharing) 或者 跟踪教程自己导出
 
    2. ```bash
-      cd Linfer/workspace
+      cd Track-trt/workspace
       bash compile_engine.sh
       ```
 
@@ -65,7 +65,6 @@
 
 
 
-
 ## Speed Test
 
 在 Jetson Orin Nano 8G 上进行测试，包括整个流程（即预处理+推理+后处理）
@@ -74,6 +73,14 @@
 | :--------: | :-------: | :--------: | :-------------: |
 | LightTrack |   fp16    |  256x256   |      10ms       |
 |  OSTrack   |   fp16    |  256x256   |      30ms       |
+
+
+
+## onnx导出
+
+[LightTrack](./lighttrack/README.md) 
+
+[OSTrack](./ostrack/README.md) 
 
 
 
