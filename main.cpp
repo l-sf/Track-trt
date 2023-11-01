@@ -120,7 +120,5 @@ int main(int argc, char* argv[]){
 
     LaunchTrack(tracker, Mode, path);
 
-
-
     return 0;
 }

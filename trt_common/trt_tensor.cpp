@@ -482,7 +482,8 @@ namespace TRT{
 	}
 
     Tensor& Tensor::set_norm_mat_invert(int n, const cv::Mat& image, float mean[3], float std[3]) {
-        Assert(image.channels() == 3 && !image.empty());
+        Assert(image.channels() == 3);
+        Assert(!image.empty());
         Assert(ndims() == 4 && n < shape_[0]);
         to_cpu(false);
 

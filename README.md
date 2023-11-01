@@ -18,9 +18,9 @@
 
 ## Project Build and Run
 
-1. install cuda/tensorrt/opencv
+1. install cuda/tensorrt/opencv/flycv
 
-   [reference](https://github.com/l-sf/Notes/blob/main/notes/Ubuntu20.04_install_tutorials.md#%E4%BA%94cuda--cudnn--tensorrt-install) 
+   [cuda/tensorrt/opencv](https://github.com/l-sf/Notes/blob/main/notes/Ubuntu20.04_install_tutorials.md#%E4%BA%94cuda--cudnn--tensorrt-install)  [flycv](https://github.com/PaddlePaddle/FlyCV/tree/release/v1.2.0) 
 
 2. compile engine
 
