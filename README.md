@@ -70,9 +70,9 @@
 在 Jetson Orin Nano 8G 上进行测试，包括整个流程（即预处理+推理+后处理）
 
 |   Method   | Precision | Resolution | Average Latency |
-| :--------: | :-------: | :--------: | :-------------: |
-| LightTrack |   fp16    |  256x256   |      10ms       |
-|  OSTrack   |   fp16    |  256x256   |      30ms       |
+| :--------: | :-------: | :--------: |:---------------:|
+| LightTrack |   fp16    |  256x256   |      11ms       |
+|  OSTrack   |   fp16    |  256x256   |      27ms       |
 
 
 
