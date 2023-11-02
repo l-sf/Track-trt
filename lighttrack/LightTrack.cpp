@@ -4,9 +4,6 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <opencv2/core/eigen.hpp>
-#include <flycv.h>
-#include <modules/img_transform/copy_make_border/interface/copy_make_border.h>
-#include <modules/img_transform/crop/interface/crop.h>
 #include "trt_common/trt_infer.hpp"
 #include "trt_common/ilogger.hpp"
 
@@ -73,7 +70,7 @@ namespace LightTrack {
             float hc_z = target_bbox_.height + 0.5 * (target_bbox_.width + target_bbox_.height);
             float s_z = std::round(std::sqrt(wc_z * hc_z));  // (s_z)^2=(w+2p)x(h+2p), 模板图像上 不缩放时的 框加上pad 的大小
             cv::Mat z_patch(template_size_, template_size_, CV_8UC3);
-            cropSubImgFcv(z_img, z_patch, template_size_, s_z);
+            cropSubImg(z_img, z_patch, template_size_, s_z);
             // 处理输入
             zin_img_ = z_model_->input(0);
             float m[] = {0.406, 0.456, 0.485};
@@ -99,7 +96,7 @@ namespace LightTrack {
             float pad = d_search / scale_z;
             float s_x = s_z + 2 * pad;
             cv::Mat x_patch(search_size_, search_size_, CV_8UC3);
-            cropSubImgFcv(x_img, x_patch, search_size_, s_x);
+            cropSubImg(x_img, x_patch, search_size_, s_x);
             float m[] = {0.406, 0.456, 0.485};
             float std[]  = {0.225, 0.224, 0.229};
             xin_img_->set_norm_mat_invert(0, x_patch, m, std);
@@ -226,45 +223,6 @@ namespace LightTrack {
                 cv::resize(img_patch_roi, dst, cv::Size(model_sz, model_sz));
             else
                 dst = img_patch_roi;
-        }
-
-        void cropSubImgFcv(cv::Mat &img, cv::Mat &dst, int model_sz, float original_sz) const {
-            fcv::Mat img_fcv(img.cols, img.rows, fcv::FCVImageType::PKG_BGR_U8, img.data);
-            fcv::Mat img_patch_roi;  // 填充不缩放
-            fcv::Rect crop;
-            float c = (original_sz + 1) / 2.f;
-            // 计算出剪裁边框的左上角和右下角
-            int context_xmin = std::round(target_bbox_.x + target_bbox_.width / 2.f - c);
-            int context_xmax = std::round(context_xmin + original_sz - 1);
-            int context_ymin = std::round(target_bbox_.y + target_bbox_.height / 2.f - c);
-            int context_ymax = std::round(context_ymin + original_sz - 1);
-            // 边界部分要填充的像素
-            int left_pad = std::max(0, -context_xmin);
-            int top_pad = std::max(0, -context_ymin);
-            int right_pad = std::max(0, context_xmax - img.cols + 1);
-            int bottom_pad = std::max(0, context_ymax - img.rows + 1);
-            // 填充之后的坐标
-            crop.set_x(context_xmin + left_pad);
-            crop.set_y(context_ymin + top_pad);
-            crop.set_width(context_xmax + left_pad - crop.x());
-            crop.set_height(context_ymax + top_pad - crop.y());
-            // 填充之后的坐标(即要裁切的ROI)
-            if (left_pad > 0 || top_pad > 0 || right_pad > 0 || bottom_pad > 0) {
-                // 填充像素
-                fcv::Mat pad_img;
-                fcv::copy_make_border(img_fcv, pad_img, top_pad, bottom_pad,
-                                      left_pad, right_pad, fcv::BorderType::BORDER_CONSTANT);
-                fcv::crop(pad_img, img_patch_roi, crop);
-            }
-            else{
-                fcv::crop(img_fcv, img_patch_roi, crop);
-            }
-            // 缩放
-            fcv::Mat dst_fcv(model_sz, model_sz, fcv::FCVImageType::PKG_BGR_U8, dst.data);
-            if (img_patch_roi.width() != model_sz || img_patch_roi.height() != model_sz)
-                fcv::resize(img_patch_roi, dst_fcv, fcv::Size(model_sz, model_sz));
-            else
-                dst_fcv = img_patch_roi;
         }
 
         int template_size_ = 128;

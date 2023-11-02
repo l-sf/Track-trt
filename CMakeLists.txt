@@ -29,18 +29,15 @@ include_directories(
         ${CUDA_DIR}/include
         ${TENSORRT_DIR}/include
         "/usr/include/eigen3"
-        "/home/lsf/Third_party/FlyCV/build/install/flycv/include"
 )
 link_directories(
         ${CUDA_DIR}/lib64
         ${TENSORRT_DIR}/lib
-        "/home/lsf/Third_party/FlyCV/build/install/flycv"
 )
 list(APPEND ALL_LIBS
         cuda cublas cudart cudnn
         nvinfer nvinfer_plugin nvonnxparser
         pthread ${OpenCV_LIBS}
-        libflycv_static.a libpng16.a libturbojpeg.a libz.a
 )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations -Wfatal-errors -pthread -w")
